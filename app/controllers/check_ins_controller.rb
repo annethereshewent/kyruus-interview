@@ -13,12 +13,10 @@ class CheckInsController < ApplicationController
     patient = Patient.find_or_create_by(id: check_in.patient_id.to_i)
 
     if patient.first_name.nil? && patient.last_name.nil?
-      url = "https://dummyjson.com/users/#{check_in.patient_id}"
+      result = KyruusRequest.get_user_info(check_in.patient_id)
 
-      result = HTTParty.get(url)
-
-      patient.first_name = result.parsed_response["firstName"]
-      patient.last_name = result.parsed_response["lastName"]
+      patient.first_name = result["firstName"]
+      patient.last_name = result["lastName"]
 
       patient.save!
     end
