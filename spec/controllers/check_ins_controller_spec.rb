@@ -25,7 +25,8 @@ RSpec.describe CheckInsController, type: :controller do
     end
 
     it "redirects to the check_in show page" do
-      check_in = create(:check_in, id: 1)
+      check_in = create(:check_in, id: 1, patient_id: "1")
+      patient = create(:patient, id: 1)
       allow(CheckIn).to receive(:create).and_return(check_in)
 
       post :create
@@ -81,6 +82,24 @@ RSpec.describe CheckInsController, type: :controller do
       put :update, params: { id: 1 }
 
       expect(CheckIn).to have_received(:find).with("1")
+    end
+
+    it "updates the check_in" do
+      check_in = create(:check_in, id: 1)
+      allow(check_in).to receive(:update).with(
+        question_1: 2,
+        question_2: 3,
+        screening_needed: true
+      )
+      allow(CheckIn).to receive(:find).with("1").and_return(check_in)
+
+      put :update, params: { id: 1, question_1: "2", question_2: "3"}
+
+      expect(check_in).to have_received(:update).with(
+        question_1: 2,
+        question_2: 3,
+        screening_needed: true
+      )
     end
 
     it "redirects back to the check_in page with results" do
