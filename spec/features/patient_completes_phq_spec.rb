@@ -15,5 +15,7 @@ RSpec.feature "A patient checks into the app" do
     expect(page).to have_content("1. Little interest or pleasure in doing things?")
 
     expect(page).to have_content("2. Feeling down, depressed or hopeless?")
+
+    # todo: click on the radio buttons and assert that it scores things correctly
   end
 end
