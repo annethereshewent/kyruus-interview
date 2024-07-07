@@ -24,6 +24,21 @@ RSpec.describe CheckInsController, type: :controller do
       expect { post(:create) }.to change(CheckIn, :count).by(1)
     end
 
+    it "performs an http request" do
+      check_in = create(:check_in, id: 1, patient_id: "1")
+      patient = create(:patient, id: 1)
+
+      allow(Patient).to receive(:find_or_create_by).and_return(patient)
+      allow(KyruusRequest).to receive(:get_user_info).with(check_in.patient_id).and_return({"firstName": "James", "lastName": "Smith"})
+
+      post :create
+
+      expect(patient.first_name).to eq("James")
+      expect(patient.last_name).to eq("Smith")
+
+      expect(KyruusRequest).to have_received(:get_user_info).with(check_in.patient_id)
+    end
+
     it "redirects to the check_in show page" do
       check_in = create(:check_in, id: 1, patient_id: "1")
       patient = create(:patient, id: 1)

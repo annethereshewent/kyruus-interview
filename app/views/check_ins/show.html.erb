@@ -1,4 +1,4 @@
-<% unless @patient.nil? %>
+<% unless @patient.nil? || (@patient.first_name.nil? && @patient.last_name.nil?) %>
   <h1>Welcome <%= @patient.first_name %> <%= @patient.last_name %></h1>
 <% end %>
 

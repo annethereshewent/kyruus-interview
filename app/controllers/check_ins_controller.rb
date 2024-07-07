@@ -15,8 +15,10 @@ class CheckInsController < ApplicationController
     if patient.first_name.nil? && patient.last_name.nil?
       result = KyruusRequest.get_user_info(check_in.patient_id)
 
-      patient.first_name = result["firstName"]
-      patient.last_name = result["lastName"]
+      # the ||'s are needed to pass unit tests. look at the unit tests
+      # to see why
+      patient.first_name = result["firstName"] || result[:firstName]
+      patient.last_name = result["lastName"] || result[:lastName]
 
       patient.save!
     end
