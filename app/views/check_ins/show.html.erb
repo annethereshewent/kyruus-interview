@@ -1,4 +1,6 @@
-<h1>Welcome <%= @patient.first_name %> <%= @patient.last_name %></h1>
+<% unless @patient.nil? %>
+  <h1>Welcome <%= @patient.first_name %> <%= @patient.last_name %></h1>
+<% end %>
 
 <% if @check_in.screening_needed.nil? %>
 <p>Please complete all of the steps on this page:</p>
@@ -23,11 +25,11 @@
     <div class="question">
       <div>
         <p>1. Little interest or pleasure in doing things?</p>
-        <input type="radio" name="question_1" value="0" checked />
+        <input type="radio" name="question_1" value="0" />
         <label>Not at all</label>
       </div>
       <div>
-        <input type="radio" nam="question_1" value="1" />
+        <input type="radio" name="question_1" value="1" />
         <label>Several days</label>
       </div>
       <div>
@@ -42,11 +44,11 @@
     <div class="question">
       <p>2. Feeling down, depressed or hopeless?</p>
       <div>
-        <input type="radio" name="question_2" value="0" checked />
+        <input type="radio" name="question_2" value="0" />
         <label>Not at all</label>
       </div>
       <div>
-        <input type="radio" nam="question_2" value="1" />
+        <input type="radio" name="question_2" value="1" />
         <label>Several days</label>
       </div>
       <div>

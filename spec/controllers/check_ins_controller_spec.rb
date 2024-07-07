@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+WebMock.allow_net_connect!
+
 RSpec.describe CheckInsController, type: :controller do
   describe "routing" do
     it { should route(:get, "/check_ins/new").to(action: :new) }
@@ -64,13 +66,13 @@ RSpec.describe CheckInsController, type: :controller do
       expect(CheckIn).to have_received(:find).with("1")
     end
 
-    it "redirects to the new check_in page" do
+    it "redirects back to the check_in page with results" do
       check_in = create(:check_in, id: 1)
       allow(CheckIn).to receive(:find).with("1").and_return(check_in)
 
       put :update, params: { id: 1 }
 
-      expect(response).to redirect_to new_check_in_path
+      expect(response).to redirect_to check_in_path(1)
     end
   end
 end

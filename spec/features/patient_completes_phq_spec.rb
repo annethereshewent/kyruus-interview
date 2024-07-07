@@ -1,5 +1,7 @@
 require "rails_helper"
 
+WebMock.allow_net_connect!
+
 RSpec.feature "A patient checks into the app" do
   scenario "for a scheduled appointment" do
     visit root_path
@@ -16,6 +18,34 @@ RSpec.feature "A patient checks into the app" do
 
     expect(page).to have_content("2. Feeling down, depressed or hopeless?")
 
-    # todo: click on the radio buttons and assert that it scores things correctly
+    expect(page).to have_content("Welcome Emily Johnson")
+  end
+
+  scenario "for a patient that needs no further screening" do
+    visit root_path
+
+    click_on "Start check in"
+    click_on "Start PHQ screener"
+
+    choose("question_1", option: "0")
+    choose("question_2", option: "1")
+
+    click_on "Complete check in"
+
+    expect(page).to have_content("Questionnaire complete. According to the results, no further screening is required.")
+  end
+
+  scenario "for a patient that needs further screening" do
+    visit root_path
+
+    click_on "Start check in"
+    click_on "Start PHQ screener"
+
+    choose("question_1", option: "2")
+    choose("question_2", option: "1")
+
+    click_on "Complete check in"
+
+    expect(page).to have_content("Questionnaire complete. According to the results, additional screening should be completed.")
   end
 end

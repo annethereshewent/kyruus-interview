@@ -1,11 +1,11 @@
-class CheckInsController < ApplicationController
 
+
+class CheckInsController < ApplicationController
 
   def new
   end
 
   def create
-    # get the patient's first name and last name from an external api
     check_in = CheckIn.create(
       patient_id: "1"
     )
@@ -26,7 +26,7 @@ class CheckInsController < ApplicationController
 
   def show
     @check_in = CheckIn.find(params[:id])
-    @patient = Patient.find(@check_in.patient_id.to_i)
+    @patient = Patient.find_by_id(@check_in.patient_id.to_i)
   end
 
   def update
