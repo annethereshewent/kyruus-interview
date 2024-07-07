@@ -1,3 +1,5 @@
+<h1>Welcome <%= @patient.first_name %> <%= @patient.last_name %></h1>
+
 <% if @check_in.screening_needed.nil? %>
 <p>Please complete all of the steps on this page:</p>
   <ul>
@@ -11,6 +13,7 @@
   <% end %>
   <button type="button" onclick="redirectToStartCheckIn()">Start another check in</button>
 <% end %>
+
 
 
 <div id="phq-checkin">
