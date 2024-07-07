@@ -26,7 +26,7 @@ class CheckInsController < ApplicationController
 
   def show
     @check_in = CheckIn.find(params[:id])
-    @patient = Patient.find_by_id(@check_in.patient_id.to_i)
+    @patient = Patient.find(@check_in.patient_id.to_i)
   end
 
   def update

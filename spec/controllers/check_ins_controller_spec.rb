@@ -33,11 +33,23 @@ RSpec.describe CheckInsController, type: :controller do
       expect(CheckIn).to have_received(:create)
       expect(response).to redirect_to check_in_path(1)
     end
+
+    it "gets the patient from check_in" do
+      check_in = create(:check_in, id: 1, patient_id: "1")
+      patient = create(:patient, id: 1)
+
+      allow(Patient).to receive(:find_or_create_by).and_return(patient)
+
+      post :create
+
+      expect(Patient).to have_received(:find_or_create_by).with(id: 1)
+    end
   end
 
   describe "GET #show" do
     it "finds the check_in" do
-      check_in = create(:check_in, id: 1)
+      check_in = create(:check_in, id: 1, patient_id: "1")
+      patient = create(:patient, id: 1)
       allow(CheckIn).to receive(:find).with("1").and_return(check_in)
 
       get :show, params: { id: 1 }
@@ -46,10 +58,15 @@ RSpec.describe CheckInsController, type: :controller do
     end
 
     it "shows the current check in" do
-      check_in = create(:check_in, id: 1)
+      check_in = create(:check_in, id: 1, patient_id: "1")
+      patient = create(:patient, id: 1)
+
       allow(CheckIn).to receive(:create).and_return(check_in)
+      allow(Patient).to receive(:find).with(check_in.patient_id.to_i).and_return(patient)
 
       get :show, params: { id: 1 }
+
+      expect(Patient).to have_received(:find).with(check_in.patient_id.to_i)
 
       expect(response).to render_template(:show)
       expect(response).to render_with_layout(:application)
