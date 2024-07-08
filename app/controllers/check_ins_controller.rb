@@ -27,7 +27,7 @@ class CheckInsController < ApplicationController
   def update
     unless params[:question_1].nil? || params[:question_2].nil?
       check_in = CheckIn.find(params[:id])
-      check_in.update_screening_needed(params)
+      check_in.update_screening_needed(params[:question_1].to_i, params[:question_2].to_i)
 
       redirect_to check_in_path(check_in)
     else
