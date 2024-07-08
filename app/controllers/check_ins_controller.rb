@@ -13,7 +13,16 @@ class CheckInsController < ApplicationController
     patient = Patient.find_or_create_by(id: check_in.patient_id.to_i)
 
     if patient.first_name.nil? && patient.last_name.nil?
-      result = KyruusRequest.get_user_info(check_in.patient_id)
+      url = "https://dummyjson.com/users/#{patient.id}"
+
+      result = KyruusRequest.perform_request(url)
+
+      # just do not show the user their personalized greeting if
+      # for whatever reason the api is down
+      if result.empty?
+        redirect_to check_in_path(check_in)
+        return
+      end
 
       # the ||'s are needed to pass unit tests. look at the unit tests
       # to see why, but basically the mock is returning back hashes
