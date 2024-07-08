@@ -19,3 +19,13 @@
   .question {
     margin-bottom: 20px;
   }
+  #alert {
+    background: #DE3163;
+    border: 1px solid red;
+    color: white;
+    padding-top: 20px;
+    text-align: center;
+
+    width: 400px;
+    height: 30px;
+  }

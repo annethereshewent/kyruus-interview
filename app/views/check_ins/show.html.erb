@@ -2,9 +2,13 @@
   <h1>Welcome <%= @patient.first_name %> <%= @patient.last_name %></h1>
 <% end %>
 
+<% if flash[:alert].present? %>
+  <div id="alert">Please fill out all of the form.</div>
+<% end %>
+
 <% if @check_in.screening_needed.nil? %>
 <p>Please complete all of the steps on this page:</p>
-  <ul>
+  <ul id="start-screener">
     <li><a href="#" onclick="showScreener()">Start PHQ screener</a></li>
   </ul>
 <% else %>
@@ -65,9 +69,23 @@
 </div>
 
 <script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function() {
+  const alert = document.getElementById("alert")
+
+  if (alert != null) {
+    setTimeout(() => {
+      alert.style = "display: none"
+    }, 1000)
+  }
+})
 function showScreener() {
   const checkin = document.getElementById("phq-checkin")
   checkin.style = "display: block"
+
+  const screener = document.getElementById("start-screener")
+  screener.style = "display: none"
+
+
 }
 function redirectToStartCheckIn() {
   location.href = "/"

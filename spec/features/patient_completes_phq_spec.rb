@@ -48,4 +48,15 @@ RSpec.feature "A patient checks into the app" do
 
     expect(page).to have_content("Questionnaire complete. According to the results, additional screening should be completed.")
   end
+
+  scenario "for a patient that does not fill out the form" do
+    visit root_path
+
+    click_on "Start check in"
+    click_on "Start PHQ screener"
+
+    click_on "Complete check in"
+
+    expect(page).to have_content("Please fill out all of the form.")
+  end
 end
