@@ -22,9 +22,8 @@ class CheckInsController < ApplicationController
         return
       end
 
-      # the ||'s are needed to pass unit tests. look at the unit tests
-      # to see why, but basically the mock is returning back hashes
-      # with token-based keys instead of string-based.
+      # check both the string-based key and token-based in case one
+      # of them doesn't work. this is also useful for unit tests.
       patient.first_name = result["firstName"] || result[:firstName]
       patient.last_name = result["lastName"] || result[:lastName]
 
@@ -46,16 +45,16 @@ class CheckInsController < ApplicationController
 
       screening_needed = question_1 > 1 || question_2 > 1
 
-      @check_in = CheckIn.find(params[:id])
+      check_in = CheckIn.find(params[:id])
 
-      @check_in.update(
+      check_in.update(
         question_1: question_1,
         question_2: question_2,
         screening_needed: screening_needed
       )
       redirect_to check_in_path
     else
-      redirect_to check_in_path, alert: "Please fill out the required fields."
+      redirect_to check_in_path, alert: "Please fill out all of the form."
     end
   end
 end

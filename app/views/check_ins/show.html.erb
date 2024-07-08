@@ -3,7 +3,7 @@
 <% end %>
 
 <% if flash[:alert].present? %>
-  <div id="alert">Please fill out all of the form.</div>
+  <div id="alert"><%= flash[:alert] %></div>
 <% end %>
 
 <% if @check_in.screening_needed.nil? %>
