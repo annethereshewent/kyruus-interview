@@ -1,7 +1,93 @@
-<p>Please complete all of the steps on this page:</p>
-<ul>
-  <li>Start PHQ screener</li>
-</ul>
-<%= form_for(:check_in, url: check_in_path, method: :put, id: 1) do |f| %>
-  <%= f.submit "Complete check in" %>
+<% unless @patient.nil? || (@patient.first_name.nil? && @patient.last_name.nil?) %>
+  <h1>Welcome <%= @patient.first_name %> <%= @patient.last_name %></h1>
 <% end %>
+
+<% if flash[:alert].present? %>
+  <div id="alert"><%= flash[:alert] %></div>
+<% end %>
+
+<% if @check_in.screening_needed.nil? %>
+<p>Please complete all of the steps on this page:</p>
+  <ul id="start-screener">
+    <li><a href="#" onclick="showScreener()">Start PHQ screener</a></li>
+  </ul>
+<% else %>
+  <% if @check_in.screening_needed %>
+    <h4>Questionnaire complete. According to the results, additional screening should be completed.</h4>
+  <% else %>
+    <h4>Questionnaire complete. According to the results, no further screening is required.</h4>
+  <% end %>
+  <button type="button" onclick="redirectToStartCheckIn()">Start another check in</button>
+<% end %>
+
+
+
+<div id="phq-checkin">
+  <%= form_for(:check_in, url: check_in_path, method: :put, id: 1) do |f| %>
+    <div class="question">
+      <h4 id="test-heading">Over the past 2 weeks, how often have you been bothered by any of the following problems?</h4>
+    <div class="question">
+      <div>
+        <p>1. Little interest or pleasure in doing things?</p>
+        <input type="radio" name="question_1" value="0" />
+        <label>Not at all</label>
+      </div>
+      <div>
+        <input type="radio" name="question_1" value="1" />
+        <label>Several days</label>
+      </div>
+      <div>
+        <input type="radio" name="question_1" value="2" />
+        <label>More than half the days</label>
+      </div>
+      <div>
+        <input type="radio" name="question_1" value="3" />
+        <label>Nearly every day</label>
+      </div>
+    </div>
+    <div class="question">
+      <p>2. Feeling down, depressed or hopeless?</p>
+      <div>
+        <input type="radio" name="question_2" value="0" />
+        <label>Not at all</label>
+      </div>
+      <div>
+        <input type="radio" name="question_2" value="1" />
+        <label>Several days</label>
+      </div>
+      <div>
+        <input type="radio" name="question_2" value="2" />
+        <label>More than half the days</label>
+      </div>
+      <div>
+        <input type="radio" name="question_2" value="3" />
+        <label>Nearly every day</label>
+      </div>
+    </div>
+    <%= f.submit "Complete check in" %>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function() {
+  const alert = document.getElementById("alert")
+
+  if (alert != null) {
+    setTimeout(() => {
+      alert.style = "display: none"
+    }, 1000)
+  }
+})
+function showScreener() {
+  const checkin = document.getElementById("phq-checkin")
+  checkin.style = "display: block"
+
+  const screener = document.getElementById("start-screener")
+  screener.style = "display: none"
+
+
+}
+function redirectToStartCheckIn() {
+  location.href = "/"
+}
+</script>

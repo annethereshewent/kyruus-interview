@@ -72,6 +72,7 @@ GEM
       html_tokenizer (~> 0.0.6)
       parser (>= 2.4)
       smart_properties
+    bigdecimal (3.1.8)
     bindex (0.8.1)
     bootsnap (1.11.1)
       msgpack (~> 1.2)
@@ -95,6 +96,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
+    csv (3.3.0)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
     database_cleaner-active_record (2.0.1)
@@ -136,6 +138,10 @@ GEM
     hashdiff (1.0.1)
     highline (2.0.3)
     html_tokenizer (0.0.7)
+    httparty (0.22.0)
+      csv
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     i18n-tasks (1.0.9)
@@ -170,6 +176,8 @@ GEM
     mini_portile2 (2.8.0)
     minitest (5.15.0)
     msgpack (1.5.1)
+    multi_xml (0.7.1)
+      bigdecimal (~> 3.1)
     nenv (0.3.0)
     net-protocol (0.1.3)
       timeout
@@ -196,7 +204,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.7)
-    puma (5.6.4)
+    puma (5.6.8)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3.1)
@@ -350,6 +358,7 @@ DEPENDENCIES
   factory_bot_rails
   foreman
   guard-rspec
+  httparty
   i18n-tasks
   jbuilder (~> 2.5)
   launchy
