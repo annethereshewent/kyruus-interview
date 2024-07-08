@@ -29,6 +29,8 @@ RSpec.feature "A patient checks into the app" do
   scenario "for a patient that needs no further screening" do
     visit root_path
 
+    allow(KyruusRequest).to receive(:get_patient_info).with(1).and_return({"firstName": "James", "lastName": "Smith"})
+
     click_on "Start check in"
     click_on "Start PHQ screener"
 
@@ -43,6 +45,8 @@ RSpec.feature "A patient checks into the app" do
   scenario "for a patient that needs further screening" do
     visit root_path
 
+    allow(KyruusRequest).to receive(:get_patient_info).with(1).and_return({"firstName": "James", "lastName": "Smith"})
+
     click_on "Start check in"
     click_on "Start PHQ screener"
 
@@ -56,6 +60,8 @@ RSpec.feature "A patient checks into the app" do
 
   scenario "for a patient that does not fill out the form" do
     visit root_path
+
+    allow(KyruusRequest).to receive(:get_patient_info).with(1).and_return({"firstName": "James", "lastName": "Smith"})
 
     click_on "Start check in"
     click_on "Start PHQ screener"

@@ -20,6 +20,7 @@ RSpec.describe CheckInsController, type: :controller do
 
   describe "POST #create" do
     it "creates a new check_in" do
+      allow(KyruusRequest).to receive(:get_patient_info).with(1).and_return({"firstName": "James", "lastName": "Smith"})
       expect { post(:create) }.to change(CheckIn, :count).by(1)
     end
 
@@ -45,6 +46,8 @@ RSpec.describe CheckInsController, type: :controller do
       check_in = create(:check_in, id: 1)
       allow(CheckIn).to receive(:create).and_return(check_in)
 
+      allow(KyruusRequest).to receive(:get_patient_info).with(1).and_return({"firstName": "James", "lastName": "Smith"})
+
       post :create
 
       expect(CheckIn).to have_received(:create)
@@ -55,11 +58,14 @@ RSpec.describe CheckInsController, type: :controller do
       check_in = create(:check_in, id: 1, patient_id: "1")
       patient = create(:patient, id: 1)
 
+      allow(KyruusRequest).to receive(:get_patient_info).with(1).and_return({"firstName": "James", "lastName": "Smith"})
       allow(Patient).to receive(:find_or_create_by).and_return(patient)
 
       post :create
 
       expect(Patient).to have_received(:find_or_create_by).with(id: 1)
+      expect(patient.first_name).to eq("James")
+      expect(patient.last_name).to eq("Smith")
     end
   end
 
