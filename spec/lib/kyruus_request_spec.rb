@@ -9,7 +9,7 @@ RSpec.describe KyruusRequest do
 
       allow(HTTParty).to receive(:get).with(url).and_raise(StandardError.new "An exception")
 
-      result = KyruusRequest.perform_request(url)
+      result = KyruusRequest.get_patient_info("1")
 
       # a return value of {} means KyruusRequest caught an exception
       expect(result).to eq({})
@@ -17,9 +17,9 @@ RSpec.describe KyruusRequest do
     it "returns back data for a valid request" do
       url = "https://dummyjson.com/users/1"
 
-      allow(KyruusRequest).to receive(:perform_request).with(url).and_return({ "firstName": "James", "lastName": "Smith" })
+      allow(KyruusRequest).to receive(:get_patient_info).with("1").and_return({ "firstName": "James", "lastName": "Smith" })
 
-      result = KyruusRequest.perform_request(url)
+      result = KyruusRequest.get_patient_info("1")
 
       expect(result[:firstName]).to eq("James")
       expect(result[:lastName]).to eq("Smith")

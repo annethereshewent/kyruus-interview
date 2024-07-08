@@ -1,6 +1,7 @@
 class KyruusRequest
-  def self.perform_request url
+  def self.get_patient_info id
     begin
+      url = "https://dummyjson.com/users/#{id}"
       result = HTTParty.get(url)
     rescue => error
       {}

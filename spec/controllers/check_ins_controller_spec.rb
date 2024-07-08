@@ -32,14 +32,14 @@ RSpec.describe CheckInsController, type: :controller do
 
       url = "https://dummyjson.com/users/#{patient.id}"
 
-      allow(KyruusRequest).to receive(:perform_request).with(url).and_return({"firstName": "James", "lastName": "Smith"})
+      allow(KyruusRequest).to receive(:get_patient_info).with(check_in.patient_id.to_i).and_return({"firstName": "James", "lastName": "Smith"})
 
       post :create
 
       expect(patient.first_name).to eq("James")
       expect(patient.last_name).to eq("Smith")
 
-      expect(KyruusRequest).to have_received(:perform_request).with(url)
+      expect(KyruusRequest).to have_received(:get_patient_info).with(check_in.patient_id.to_i)
     end
 
     it "redirects to the check_in show page" do

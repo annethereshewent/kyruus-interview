@@ -13,9 +13,7 @@ class CheckInsController < ApplicationController
     patient = Patient.find_or_create_by(id: check_in.patient_id.to_i)
 
     if patient.first_name.nil? && patient.last_name.nil?
-      url = "https://dummyjson.com/users/#{patient.id}"
-
-      result = KyruusRequest.perform_request(url)
+      result = KyruusRequest.get_patient_info(patient.id)
 
       # just do not show the user their personalized greeting if
       # for whatever reason the api is down
