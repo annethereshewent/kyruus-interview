@@ -6,9 +6,7 @@ class CheckInsController < ApplicationController
   end
 
   def create
-    check_in = CheckIn.create(
-      patient_id: "1"
-    )
+    check_in = CheckIn.create(patient_id: "1")
 
     patient = Patient.find_or_create_by(id: check_in.patient_id.to_i)
 
