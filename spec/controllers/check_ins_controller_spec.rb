@@ -110,7 +110,7 @@ RSpec.describe CheckInsController, type: :controller do
       check_in = create(:check_in, id: 1)
       allow(CheckIn).to receive(:find).with("1").and_return(check_in)
 
-      put :update, params: { id: 1, question_1: "2", question_2: "1" }
+      put :update, params: { id: 1 }
 
       expect(CheckIn).to have_received(:find).with("1")
     end
