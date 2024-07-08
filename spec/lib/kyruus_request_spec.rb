@@ -25,5 +25,4 @@ RSpec.describe KyruusRequest do
       expect(result[:lastName]).to eq("Smith")
     end
   end
-
 end
