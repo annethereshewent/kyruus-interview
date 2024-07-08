@@ -13,21 +13,7 @@ class CheckInsController < ApplicationController
     patient = Patient.find_or_create_by(id: check_in.patient_id.to_i)
 
     if patient.first_name.nil? && patient.last_name.nil?
-      result = KyruusRequest.get_patient_info(patient.id)
-
-      # just do not show the user their personalized greeting if
-      # for whatever reason the api is down
-      if result.empty?
-        redirect_to check_in_path(check_in)
-        return
-      end
-
-      # check both the string-based key and token-based in case one
-      # of them doesn't work. this is also useful for unit tests.
-      patient.first_name = result["firstName"] || result[:firstName]
-      patient.last_name = result["lastName"] || result[:lastName]
-
-      patient.save!
+      patient.update_patient_info
     end
 
     redirect_to check_in_path(check_in)
@@ -40,19 +26,10 @@ class CheckInsController < ApplicationController
 
   def update
     unless params[:question_1].nil? || params[:question_2].nil?
-      question_1 = params[:question_1].to_i
-      question_2 = params[:question_2].to_i
-
-      screening_needed = question_1 > 1 || question_2 > 1
-
       check_in = CheckIn.find(params[:id])
+      check_in.update_screening_needed(params)
 
-      check_in.update(
-        question_1: question_1,
-        question_2: question_2,
-        screening_needed: screening_needed
-      )
-      redirect_to check_in_path
+      redirect_to check_in_path(check_in)
     else
       redirect_to check_in_path, alert: "Please fill out all of the form."
     end
