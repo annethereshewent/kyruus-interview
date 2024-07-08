@@ -1,7 +1,5 @@
 require "rails_helper"
 
-WebMock.allow_net_connect!
-
 RSpec.feature "A patient checks into the app" do
   scenario "for a scheduled appointment" do
     visit root_path

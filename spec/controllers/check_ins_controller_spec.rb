@@ -1,6 +1,5 @@
 require 'rails_helper'
 
-WebMock.allow_net_connect!
 
 RSpec.describe CheckInsController, type: :controller do
   describe "routing" do
@@ -43,8 +42,7 @@ RSpec.describe CheckInsController, type: :controller do
     end
 
     it "redirects to the check_in show page" do
-      check_in = create(:check_in, id: 1, patient_id: "1")
-      patient = create(:patient, id: 1)
+      check_in = create(:check_in, id: 1)
       allow(CheckIn).to receive(:create).and_return(check_in)
 
       post :create
@@ -53,7 +51,7 @@ RSpec.describe CheckInsController, type: :controller do
       expect(response).to redirect_to check_in_path(1)
     end
 
-    it "gets the patient from check_in" do
+    it "finds or creates the patient from check_in" do
       check_in = create(:check_in, id: 1, patient_id: "1")
       patient = create(:patient, id: 1)
 
@@ -69,6 +67,7 @@ RSpec.describe CheckInsController, type: :controller do
     it "finds the check_in" do
       check_in = create(:check_in, id: 1, patient_id: "1")
       patient = create(:patient, id: 1)
+
       allow(CheckIn).to receive(:find).with("1").and_return(check_in)
 
       get :show, params: { id: 1 }
@@ -76,16 +75,24 @@ RSpec.describe CheckInsController, type: :controller do
       expect(CheckIn).to have_received(:find).with("1")
     end
 
-    it "shows the current check in" do
+    it "finds the patient" do
       check_in = create(:check_in, id: 1, patient_id: "1")
       patient = create(:patient, id: 1)
 
-      allow(CheckIn).to receive(:create).and_return(check_in)
       allow(Patient).to receive(:find).with(check_in.patient_id.to_i).and_return(patient)
 
       get :show, params: { id: 1 }
 
       expect(Patient).to have_received(:find).with(check_in.patient_id.to_i)
+    end
+
+    it "shows the current check in" do
+      check_in = create(:check_in, id: 1, patient_id: "1")
+      patient = create(:patient, id: 1)
+
+      allow(CheckIn).to receive(:create).and_return(check_in)
+
+      get :show, params: { id: 1 }
 
       expect(response).to render_template(:show)
       expect(response).to render_with_layout(:application)
@@ -127,6 +134,15 @@ RSpec.describe CheckInsController, type: :controller do
       put :update, params: { id: 1 }
 
       expect(response).to redirect_to check_in_path(1)
+    end
+
+    it "throws an alert on bad validation" do
+      check_in = create(:check_in, id: 1)
+
+      put :update, params: { id: 1 }
+
+      expect(flash[:alert]).to be_present
+      expect(flash[:alert]).to eq("Please fill out all of the form.")
     end
   end
 end
