@@ -4,7 +4,11 @@ RSpec.feature "A patient checks into the app" do
   scenario "for a scheduled appointment" do
     visit root_path
 
+    allow(KyruusRequest).to receive(:get_patient_info).with(1).and_return({"firstName": "James", "lastName": "Smith"})
+
     click_on "Start check in"
+
+    expect(page).to have_content("Welcome James Smith")
 
     expect(page).to have_content "Please complete all of the steps on this page"
 
@@ -16,7 +20,10 @@ RSpec.feature "A patient checks into the app" do
 
     expect(page).to have_content("2. Feeling down, depressed or hopeless?")
 
-    expect(page).to have_content("Welcome Emily Johnson")
+    expect(page).to have_content("Not at all")
+    expect(page).to have_content("Several days")
+    expect(page).to have_content("More than half the days")
+    expect(page).to have_content("Nearly every day")
   end
 
   scenario "for a patient that needs no further screening" do

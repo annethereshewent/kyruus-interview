@@ -15,8 +15,6 @@ RSpec.describe KyruusRequest do
       expect(result).to eq({})
     end
     it "returns back data for a valid request" do
-      url = "https://dummyjson.com/users/1"
-
       allow(KyruusRequest).to receive(:get_patient_info).with("1").and_return({ "firstName": "James", "lastName": "Smith" })
 
       result = KyruusRequest.get_patient_info("1")
